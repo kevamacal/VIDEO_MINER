@@ -2,19 +2,20 @@ package aiss.videominer.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * @author Juan C. Alonso
  */
 @Entity
-@Table(name = "User")
+@Table(name = "VMUser")
 public class User {
 
     /*
-    * In order to avoid making the model unnecessarily complex, we establish a one-to-one relationship between Comment and
-    * User (instead of many-to-one). This causes an exception if we try to add a Comment to the DataBase that has been
-    * created by a User that already has a Comment in a previously stored Video. To avoid this exception, we automatically
-    * assign an id to each new User with AutoIncrement.
+     * In order to avoid making the model unnecessarily complex, we establish a one-to-one relationship between Comment and
+     * User (instead of many-to-one). This causes an exception if we try to add a Comment to the DataBase that has been
+     * created by a User that already has a Comment in a previously stored Video. To avoid this exception, we automatically
+     * assign an id to each new User with AutoIncrement.
      */
     @Id
     @JsonProperty("id")
@@ -22,12 +23,18 @@ public class User {
     private Long id;
 
     @JsonProperty("name")
+    @Column(name = "name")
+    @NotEmpty(message = "User name cannot be empty")
     private String name;
 
     @JsonProperty("user_link")
+    @Column(name = "user_link")
+    @NotEmpty(message = "User link cannot be empty")
     private String user_link;
 
     @JsonProperty("picture_link")
+    @Column(name = "picture_link")
+    @NotEmpty(message = "User picture cannot be empty")
     private String picture_link;
 
     public Long getId() {

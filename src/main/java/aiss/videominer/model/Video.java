@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.util.List;
 
@@ -20,10 +21,11 @@ public class Video {
 
     @JsonProperty("name")
     @NotEmpty(message = "Video name cannot be empty")
+    @Column(name = "name")
     private String name;
 
     @JsonProperty("description")
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @JsonProperty("releaseTime")
