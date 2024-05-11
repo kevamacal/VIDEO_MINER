@@ -12,18 +12,34 @@ import java.util.List;
 import java.util.Optional;
 
 
-@RestController
-@RequestMapping("/videominer/channels")
+@Controller
+@RequestMapping("/videominer")
 public class ChannelController {
 
     @Autowired
     ChannelRepository repository;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public Channel create(@Valid @RequestBody Channel channel ){
-        Channel _channel = repository.save(new Channel(channel.getId(),channel.getName(), channel.getDescription(), channel.getCreatedTime(), channel.getVideos()));
-        return _channel;
+    @GetMapping
+    public List<Channel> findAll(){
+        return repository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Channel findOne(@PathVariable Long id){
+        Optional<Channel> channel = repository.findById(id);
+        return channel.get();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/channels")
+    public Channel create(@Valid @RequestBody Channel channel){
+        Channel newChannel = repository.save(
+                new Channel(channel.getId(),
+                        channel.getName(),
+                        channel.getDescription(),
+                        channel.getCreatedTime(),
+                        channel.getVideos())
+        );
+        return newChannel;
+    }
 }

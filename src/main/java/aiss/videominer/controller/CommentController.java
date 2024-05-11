@@ -1,7 +1,7 @@
 package aiss.videominer.controller;
 
-import aiss.videominer.model.Caption;
-import aiss.videominer.repository.CaptionRepository;
+import aiss.videominer.model.Comment;
+import aiss.videominer.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,18 +11,19 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/videominer")
-public class CaptionController {
+public class CommentController {
+
     @Autowired
-    CaptionRepository repository;
+    CommentRepository repository;
 
     @GetMapping
-    public List<Caption> findAll(){
+    public List<Comment> findAll(){
         return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Caption findOne(@PathVariable Long id){
-        Optional<Caption> channel = repository.findById(id);
-        return channel.get();
+    public Comment findOne(@PathVariable Long id){
+        Optional<Comment> comment = repository.findById(id);
+        return comment.get();
     }
 }
