@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import aiss.videominer.model.Channel;
@@ -33,8 +36,12 @@ public class ChannelController {
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Channel.class),mediaType = "application/json")})
     })
    @GetMapping
-    public List<Channel> findAll(){
-        return repository.findAll();
+    public List<Channel> findAll(@Parameter(description = "number of the page to be retrieved")@RequestParam(defaultValue = "0")int page,
+                                 @Parameter(description = "size of page to be retrieved")@RequestParam(defaultValue = "10")int size){
+        Page<Channel> pageChannel;
+        Pageable paging = PageRequest.of(page,size);
+        pageChannel = repository.findAll(paging);
+        return pageChannel.getContent();
     }
 
     @Operation(
