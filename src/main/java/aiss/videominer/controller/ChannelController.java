@@ -1,6 +1,7 @@
 package aiss.videominer.controller;
 
 import aiss.videominer.exception.ChannelNotFoundException;
+import aiss.videominer.exception.MinValueException;
 import aiss.videominer.repository.ChannelRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import aiss.videominer.model.Channel;
@@ -28,6 +30,8 @@ public class ChannelController {
 
     @Autowired
     ChannelRepository repository;
+
+
     @Operation(
         summary = "Retrieve a list of channels",
         description = "Get a list of channels",
@@ -37,10 +41,34 @@ public class ChannelController {
     })
    @GetMapping
     public List<Channel> findAll(@Parameter(description = "number of the page to be retrieved")@RequestParam(defaultValue = "0")int page,
-                                 @Parameter(description = "size of page to be retrieved")@RequestParam(defaultValue = "10")int size){
+                                 @Parameter(description = "size of page to be retrieved")@RequestParam(defaultValue = "10")int size,
+                                 @Parameter(description = "name of the channels to be retrieved")@RequestParam(required = false) String name,
+                                 @Parameter(description = "parameter to order channels retrieved")@RequestParam(required = false)String order) throws MinValueException {
+
+        if (page < 0 || size < 0){
+            throw new MinValueException();
+        }
+
+        Pageable paging;
+
+        if(order != null){
+            if (order.startsWith("-")){
+                paging = PageRequest.of(page,size, Sort.by(order.substring(1)).descending());
+            }else {
+                paging = PageRequest.of(page,size, Sort.by(order).ascending());
+            }
+        }else{
+            paging = PageRequest.of(page,size);
+        }
+
         Page<Channel> pageChannel;
-        Pageable paging = PageRequest.of(page,size);
-        pageChannel = repository.findAll(paging);
+
+        if(name != null){
+            pageChannel = repository.findByName(name,paging);
+        }else {
+            pageChannel = repository.findAll(paging);
+        }
+
         return pageChannel.getContent();
     }
 
