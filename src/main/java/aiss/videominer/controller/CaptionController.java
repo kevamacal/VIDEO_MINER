@@ -3,7 +3,6 @@ package aiss.videominer.controller;
 import aiss.videominer.exception.CaptionNotFoundException;
 import aiss.videominer.exception.MinValueException;
 import aiss.videominer.model.Caption;
-import aiss.videominer.model.Channel;
 import aiss.videominer.repository.CaptionRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

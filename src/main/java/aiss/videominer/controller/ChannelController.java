@@ -80,7 +80,7 @@ public class ChannelController {
             @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Channel.class),mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
-    public Channel findOne(@Parameter(description = "id of the channel to be searched") @PathVariable String id) throws ChannelNotFoundException {
+    public Channel findOne(@Parameter(description = "Id's name of the channel") @PathVariable String id) throws ChannelNotFoundException {
         Optional<Channel> channel = repository.findById(id);
         return channel.get();
     }
